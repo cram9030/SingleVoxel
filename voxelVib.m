@@ -1,7 +1,6 @@
 function dx = voxelVib(t,x)
 
-global c k m
+global A
 
-dx = zeros(2,1);
-dx(1) = x(2);
-dx(2) = 1/m*(-k*x(1));%-c*x(2));
+dx = zeros(size(x));
+dx = A*x;
