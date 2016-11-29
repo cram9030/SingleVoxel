@@ -50,7 +50,7 @@ B_dist = [zeros(num);1/m*eye(num)];
 
 %Populate control input matrices
 for i = 1:length(ControlLocs)
-    B(ControlLocs(i),i) = 1/m;
+    B(num+ControlLocs(i),i) = 1/m;
 end
 
 %Create output matrix
