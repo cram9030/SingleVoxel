@@ -3,24 +3,22 @@ function [Ahat,Dhat,Bhat,Hhat,Mhat] = diagonalizeA(A,D,B,H,M)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % diagonalizeA: diagonalize the A matrix procuced by singleSpringSystem		
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% This function diagonalizes A to create decentralized form
+% This function diagonalizes A and shift other matrices to corrispond
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %	Author:	Nick Cramer, UCSC, Department of Computer Engineering			
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Called by:    --------------------										
 % Calls:	MATLAB 5.2 std fcns
-% Inputs:   m - mass
-%           k - stiffness
-%           c- damping
-%           ControlLocs - Array of control input locations
-%           SensorLocs - Array of sensor locations
-%           num - number of voxels
-% Outputs:  A - State matrix of size 2*num
-%           B_dist - Disturbance input matrix of size 2*num by
-%                   length(DisturbLocs)
-%           B_cont - Control input matrix of size 2*num by
-%                   length(ControlLocs)
-%           C - Output matrix
+% Inputs:   A - State Matrix
+%           D - Disturbance Matrix
+%           B - Input Matrix
+%           H - Control State Matrix
+%           M - Output Matrix
+% Outputs:  Ahat - Diagonalized State Matrix
+%           Dhat - Adjusted Disturbance Matrix
+%           Bhat - Adjusted Input Matrix
+%           Hhat - Adjusted Control State Matrix
+%           Mhat - Adjusted Output Matrix
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Initalize output matrices
@@ -30,6 +28,7 @@ Bhat = zeros(size(B));
 Hhat = zeros(size(H));
 Mhat = zeros(size(M));
 
+%Iterate through subblock matrices
 for i = 1:length(A)/2
      Ahat(2*(i-1)+1,2*(i-1)+2) = A(i,length(A)/2+i);
      index = find(A(length(A)/2+i,:));
