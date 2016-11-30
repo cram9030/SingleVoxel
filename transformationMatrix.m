@@ -15,13 +15,16 @@ function T = transformationMatrix(ControlLocs,num)
 % Outputs:  T - transformation matrix
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%Intializes subBlock array
 subBlocks = diff([0,diff(ControlLocs)/2+ControlLocs(1:end-1),num]);
 for i = 1:(length(subBlocks)-1)
     subBlocks = [subBlocks(1:(2*i-1)),1,subBlocks((2*i):end)];
 end
 
+%Intialize output Matrix
 T = [];
 
+%Iterate through matrix creation via subBlocks
 for i = 1:length(subBlocks)
     tempT = [];
     if mod(i,2) == 1;
