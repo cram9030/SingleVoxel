@@ -3,10 +3,11 @@ function [L,G,Z] = LMIDesign(A,D,B,H,M,W,V,I_c,O_c)
 yalmip('clear');
 [m,n] = size(B);
 [~,r] = size(D);
+[s,~] = size(M);
 A = [A,B;zeros(n,m),zeros(n)];
 B = [zeros(size(B));eye(n)];
 D = [D;zeros(n,r)];
-M = [M,zeros(length(O_c),n)];
+M = [M,zeros(s,n)];
 C = [H,zeros(length(O_c),length(I_c));zeros(length(I_c),m),eye(length(I_c))];
 
 Y = sdpvar(length(A),length(A));
@@ -19,7 +20,7 @@ F = F + [Y>0];%Enforce positive semidefinite Y
 
 %Controller
 F = F + [[Z*A'+A*Z+G'*B'+B*G  Y*M'*inv(V)*sqrt(V);sqrt(V)'*(Y*M'*inv(V))' -eye(size(V))]<0];
-F = F + [Z > 0]; % %Z is positive semidefinit
+F = F + [Z > 0]; % %Z is positive semidefinite
 F = F + [diag(O_c)-C(1:length(O_c),:)*(Y+Z)*C(1:length(O_c),:)'>=0];
 F = F + [diag(I_c)-C(length(O_c)+1:end,:)*(Y+Z)*C(length(O_c)+1:end,:)'>=0];
 
