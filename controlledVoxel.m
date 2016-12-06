@@ -31,19 +31,20 @@ x_a = x(1:length(x)/2);
 x_c = x(length(x)/2+1:end);
 
 % Calculate U and the actual state vector
-u = -K*x_c;
+u = K*x_c;
 u = zeros(size(u));
-u = K*x_a;
+%u = K*x_a;
 
 if t<0.0001
     w = [zeros(n-1,1);1];
 else
     w = zeros(n,1);
 end
+
 dx_a = Aaug*x_a+Baug*u+Daug*w;
 
 % Calcuate the observed/estimated state vector
-dx_c = Aaug*x_c + Baug*u + L*(Maug*x_a-Maug*x_c);
+dx_c = Aaug*x_c + Baug*u + L*(Maug*(x_a-x_c));
 
 % Combine derivates
 dx = [dx_a;dx_c];

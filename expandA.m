@@ -32,7 +32,7 @@ subH(1).H = [];
 Atilde = zeros(length(A)+2*diff(length(ControlLocs)),length(A)+2*diff(length(ControlLocs)));
 Btilde = zeros(length(A)+2*diff(length(ControlLocs)),length(ControlLocs));
 Dtilde = zeros(length(A)+2*diff(length(ControlLocs)),length(A)/2);
-subBlocks = [1,cumsum(diff([0,diff(ControlLocs)/2+ControlLocs(1:end-1),num]))];
+subBlocks = [1,cumsum(diff([0,mod(diff(ControlLocs),2)+floor(diff(ControlLocs)/2)+ControlLocs(1:end-1),num]))];
 
 %Iterate through all subblocks
 for i = 1:length(subBlocks)-1
