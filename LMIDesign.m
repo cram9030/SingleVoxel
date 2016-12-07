@@ -17,15 +17,15 @@ Z = sdpvar(length(A),length(A));
 G = sdpvar(n,m+n);
 
 %estimator
-Y = care(A,M',D*W*D',V,zeros(size(M')),eye(size(A)));
+Y = care(A-8.5e-1*eye(size(A)),M',D*W*D'+1e-10*eye(size(D*W*D')),V,zeros(size(M')),eye(size(A)));
 
 %solve for observer gain
 Y = double(Y);
 L = Y*M'*inv(V);
 
 %Controller
-F = [[Z*A'+A*Z+G'*B'+B*G+eye(size(A))  L*sqrt(V);sqrt(V)'*L' -eye(size(V))]<0];
-F = F + [Z > 0]; % %Z is positive semidefinit
+F = [[Z*A'+A*Z+G'*B'+B*G  L*sqrt(V);sqrt(V)'*L' -eye(size(V))]<0];
+F = F + [Z-1e-4*eye(size(A))> 0]; % %Z is positive semidefinit
 F = F + [diag(O_c)-C(1:length(O_c),:)*(Y+Z)*C(1:length(O_c),:)'>=0];
 F = F + [diag(I_c)-C(length(O_c)+1:end,:)*(Y+Z)*C(length(O_c)+1:end,:)'>=0];
 

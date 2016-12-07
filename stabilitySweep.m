@@ -1,7 +1,9 @@
-function [contStab,obsrvStab] = stabilitySweep(m,k,c,num,divRange,weightRange)
+function [contStab,obsrvStab,contEig,obsrvEig] = stabilitySweep(m,k,c,num,divRange,weightRange)
 
 contStab = zeros(length(divRange),length(weightRange),length(weightRange));
 obsrvStab = zeros(length(divRange),length(weightRange),length(weightRange));
+contEig = zeros(length(divRange),length(weightRange),length(weightRange));
+obsrvEig = zeros(length(divRange),length(weightRange),length(weightRange));
 
 for i = 1:length(divRange)
     for j = 1:length(weightRange)
@@ -21,12 +23,14 @@ for i = 1:length(divRange)
         [~,r] = size(Dhat);
         Aaug = [Ahat,Bhat;zeros(n,m),-eye(n)];
         Baug = [zeros(size(B));eye(n)];
-        Maug = [Mhat,zeros(s,n)];
+        Maug = [Mhat,zeros(s,n);zeros(n,m),eye(n)];
         for k = 1:length(weightRange)
             for l = 1:length(subA)
-                subV(l).V = weightRange(k);
+                subV(l).V = weightRange(k)*eye(2);
             end
             [subL,subK,subG,subZ,K,L] = DecentralizedLMI(subA,subD,subB,subH,subM,subW,subV,subI_c,subO_c);
+            obsrvEig(i,j,k) = max(real(eig(Aaug+L*Maug)));
+            contEig(i,j,k) = max(real(eig(Aaug+Baug*K)));
             if max(real(eig(Aaug+L*Maug)))<0
                 obsrvStab(i,j,k) = 1;
             else
