@@ -36,13 +36,12 @@ for i = 1:length(subL)
     [m,n] = size(subB(i).B);
     [s,~] = size(subM(i).M);
     M = [subM(i).M,zeros(s,n);zeros(n,m),eye(n)];
-    %size([x_a(2*subBlocks(i)-1:2*subBlocks(i+1));x_a(end-length(subL)+i)])
-    temp = M*([x_a(2*subBlocks(i)-1:2*subBlocks(i+1));x_a(end-length(subL)+i)]-[x_c(pos:pos+length(subL(i).L)-2);x_c(end-length(subL)+i)]);
-    observ(pos:pos+length(subL(i).L)-2) = subL(i).L(1:end-1,:)*temp;
+    temp = M*([x_a(2*subBlocks(i)-1:2*subBlocks(i+1));x_a(end-length(subL)+i)]-[x_c(2*subBlocks(i)-1+2*(i-1):2*subBlocks(i+1)+2*(i-1));x_c(end-length(subL)+i)]);
+    observ(2*subBlocks(i)-1+2*(i-1):2*subBlocks(i+1)+2*(i-1)) = subL(i).L(1:end-1,:)*temp;
     observ(end-length(subL)+i) = subL(i).L(end,:)*temp;
     
     u(i) = subK(i).K*[x_c(pos:pos+length(subL(i).L)-2);x_c(end-length(subL)+i)];
-    pos = pos+length(subL(i).L-2);
+    pos = pos+length(subL(i).L-1);
 end
 
 % Calculate U and the actual state vector
