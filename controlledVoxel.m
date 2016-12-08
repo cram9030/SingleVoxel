@@ -47,7 +47,7 @@ end
 % Calculate U and the actual state vector
 %u = K*x_c;
 u = zeros(size(u));
-%u = K*x_a;
+u = K*x_a;
 
 [~,n] = size(Daug);
 

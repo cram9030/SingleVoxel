@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [subL,subK,subG,subZ,K,L,Ktilde,Ltilde] = DecentralizedLMI(subA,subD,subB,subH,subM,subW,subV,subI_c,subO_c)
+function [subK,subG,subZ,K,Ktilde] = DecentralizedLMI(subA,subD,subB,subH,subM,subW,subV,subI_c,subO_c)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DecentralizedLMI: Computes the decralized LMI matrices	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -38,31 +38,31 @@ end
 K = zeros(length(subA),tildeLength-length(subA)+2);
 L = zeros(tildeLength-length(subA)+2,2*length(subA));
 Ktilde = zeros(length(subA),tildeLength+length(subA));
-Ltilde = zeros(tildeLength+length(subA),3*length(subA));
+%Ltilde = zeros(tildeLength+length(subA),3*length(subA));
 
 %Iterate through each LMI design criteria
 pos = 1;
 tildePos = 1;
 for i = 1:length(subA)
-    [subL(i).L,subG(i).G,subZ(i).Z] = LMIDesign(subA(i).A,subD(i).D,subB(i).B,subH(i).H,subM(i).M,subW(i).W,subV(i).V,subI_c(i).I_c,subO_c(i).O_c);
-    subK(i).K = subG(i).G/subZ(i).Z;
+    [subK(i).K,subG(i).G,subZ(i).Z] = LMIDesign(subA(i).A,subD(i).D,subB(i).B,subH(i).H,subM(i).M,subW(i).W,subV(i).V,subI_c(i).I_c,subO_c(i).O_c);
+    %subK(i).K = subG(i).G/subZ(i).Z;
     K(i,pos:length(subK(i).K)+pos-2) = subK(i).K(1:end-1);
     K(i,end-length(subA)+i) = subK(i).K(end);
     
-    L(pos:length(subL(i).L)+pos-2,i) = subL(i).L(1:end-1,1);
-    L(end-length(subA)+i,i) = subL(i).L(end,1);
-    L(pos:length(subL(i).L)+pos-2,i+length(subA)) = subL(i).L(1:end-1,2);
-    L(end-length(subA)+i,i+length(subA)) = subL(i).L(end,2);
+%     L(pos:length(subL(i).L)+pos-2,i) = subL(i).L(1:end-1,1);
+%     L(end-length(subA)+i,i) = subL(i).L(end,1);
+%     L(pos:length(subL(i).L)+pos-2,i+length(subA)) = subL(i).L(1:end-1,2);
+%     L(end-length(subA)+i,i+length(subA)) = subL(i).L(end,2);
     
     Ktilde(i,tildePos:tildePos+length(subK(i).K)-2) = subK(i).K(1:end-1);
     Ktilde(i,end-length(subA)+i) = subK(i).K(end);
     
-    Ltilde(tildePos:tildePos+length(subL(i).L)-2,i) = subL(i).L(1:end-1,1);
-    Ltilde(end-length(subA)+i,i) = subL(i).L(end,1);
-    Ltilde(tildePos:tildePos+length(subL(i).L)-2,i+length(subA)) = subL(i).L(1:end-1,2);
-    Ltilde(end-length(subA)+i,i+length(subA)) = subL(i).L(end,2);
-    Ltilde(tildePos:tildePos+length(subL(i).L)-2,i+2*length(subA)) = subL(i).L(1:end-1,3);
-    Ltilde(end-length(subA)+i,i+2*length(subA)) = subL(i).L(end,3);
+%     Ltilde(tildePos:tildePos+length(subL(i).L)-2,i) = subL(i).L(1:end-1,1);
+%     Ltilde(end-length(subA)+i,i) = subL(i).L(end,1);
+%     Ltilde(tildePos:tildePos+length(subL(i).L)-2,i+length(subA)) = subL(i).L(1:end-1,2);
+%     Ltilde(end-length(subA)+i,i+length(subA)) = subL(i).L(end,2);
+%     Ltilde(tildePos:tildePos+length(subL(i).L)-2,i+2*length(subA)) = subL(i).L(1:end-1,3);
+%     Ltilde(end-length(subA)+i,i+2*length(subA)) = subL(i).L(end,3);
     
     pos = pos + length(subK(i).K)-3;
     tildePos = tildePos+length(subK(i).K)-1;
