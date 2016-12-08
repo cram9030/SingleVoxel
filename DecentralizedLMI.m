@@ -38,7 +38,7 @@ end
 K = zeros(length(subA),tildeLength-length(subA)+2);
 L = zeros(tildeLength-length(subA)+2,2*length(subA));
 Ktilde = zeros(length(subA),tildeLength+length(subA));
-Ltilde = zeros(tildeLength+length(subA),2*length(subA));
+Ltilde = zeros(tildeLength+length(subA),3*length(subA));
 
 %Iterate through each LMI design criteria
 pos = 1;
@@ -61,6 +61,8 @@ for i = 1:length(subA)
     Ltilde(end-length(subA)+i,i) = subL(i).L(end,1);
     Ltilde(tildePos:tildePos+length(subL(i).L)-2,i+length(subA)) = subL(i).L(1:end-1,2);
     Ltilde(end-length(subA)+i,i+length(subA)) = subL(i).L(end,2);
+    Ltilde(tildePos:tildePos+length(subL(i).L)-2,i+2*length(subA)) = subL(i).L(1:end-1,3);
+    Ltilde(end-length(subA)+i,i+2*length(subA)) = subL(i).L(end,3);
     
     pos = pos + length(subK(i).K)-3;
     tildePos = tildePos+length(subK(i).K)-1;

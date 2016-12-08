@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [Atilde,subA,Btilde,subB,Dtilde,subD,Mtilde,subM,Htilde,subH] = expandA(A,B,D,ControlLocs,num)
+function [Atilde,subA,Btilde,subB,Dtilde,subD,Mtilde,subM,Htilde,subH] = expandA(A,B,D,M,H,ControlLocs,num)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % expandA: Expands A for decentralized control of overlaping information structure	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -16,6 +16,8 @@ function [Atilde,subA,Btilde,subB,Dtilde,subD,Mtilde,subM,Htilde,subH] = expandA
 %           subA - array of matrices
 %                   A - subBlock matrix to be controlled
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Note that this current configuration limits the number of sensed states
+% to 2 per block and number of actuator states to 1
 
 %Check that Matrix is appropriately banded for a spring mass representation
 [lower,upper] = bandwidth(A);
@@ -40,13 +42,15 @@ for i = 1:length(subBlocks)-1
     Atilde(2*subBlocks(i)-1+2*(i-1):2*subBlocks(i+1)+2*(i-1),2*subBlocks(i)-1+2*(i-1):2*subBlocks(i+1)+2*(i-1)) = A(2*subBlocks(i)-1:2*subBlocks(i+1),2*subBlocks(i)-1:2*subBlocks(i+1));
     Btilde(2*subBlocks(i)-1+2*(i-1):2*subBlocks(i+1)+2*(i-1),:) = B(2*subBlocks(i)-1:2*subBlocks(i+1),:);
     Dtilde(2*subBlocks(i)-1+2*(i-1):2*subBlocks(i+1)+2*(i-1),:) = D(2*subBlocks(i)-1:2*subBlocks(i+1),:);
+    Mtilde(:,2*subBlocks(i)-1+2*(i-1):2*subBlocks(i+1)+2*(i-1)) = M(:,2*subBlocks(i)-1:2*subBlocks(i+1));
+    Htilde(:,2*subBlocks(i)-1+2*(i-1):2*subBlocks(i+1)+2*(i-1)) = H(:,2*subBlocks(i)-1:2*subBlocks(i+1));
     
     %Save primary diagional subblocks into structure
     subA(i).A = A(2*subBlocks(i)-1:2*subBlocks(i+1),2*subBlocks(i)-1:2*subBlocks(i+1));
     subB(i).B = B(2*subBlocks(i)-1:2*subBlocks(i+1),i);
     subD(i).D = D(2*subBlocks(i)-1:2*subBlocks(i+1),subBlocks(i):subBlocks(i+1));
-    subM(i).M = double(logical(subB(i).B'));
-    subH(i).H = double(logical(subB(i).B'));
+    subM(i).M = M(2*(i-1)+1:2*i,2*subBlocks(i)-1:2*subBlocks(i+1));
+    subH(i).H = H(2*(i-1)+1:2*i,2*subBlocks(i)-1:2*subBlocks(i+1));
     
     %Set constraint controls on overlapping subblocks
     if i~=1 && i~=length(subBlocks)-1
@@ -63,6 +67,3 @@ for i = 1:length(subBlocks)-1
         Atilde(2*subBlocks(i+1)+1+2*(i-1):2*subBlocks(i+1)+2*(i-1)+2,2*subBlocks(i+1)+2*(i-1)-3:2*subBlocks(i+1)+2*(i-1)-2) = A(2*subBlocks(i+1)+1:2*subBlocks(i+1)+2,2*subBlocks(i+1)+-1:2*subBlocks(i+1));
     end
 end
-
-Mtilde = double(logical(Btilde'));
-Htilde = double(logical(Btilde'));
