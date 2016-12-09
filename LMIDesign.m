@@ -24,7 +24,7 @@ G = sdpvar(n,m+n);
 %L = Y*M'*inv(V);
 
 %Controller
-F = [[Z*Aalpha'+Aalpha*Z+G'*B'+B*G  D*sqrt(W);sqrt(W)'*D' -eye(size(W))]<0];
+F = [[Z*Aalpha'+Aalpha*Z+G'*B'+B*G+Q  D*sqrt(W);sqrt(W)'*D' R]<0];
 F = F + [Z-V> 0]; % %Z is positive semidefinit
 for i = 1:length(O_c)
     F = F + [O_c(i)-C(i,:)*(Z)*C(i,:)'>=0];

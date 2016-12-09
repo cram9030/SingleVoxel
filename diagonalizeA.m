@@ -44,8 +44,17 @@ for i = 1:length(A)/2
      end
      Dhat(2*i,:) = D(length(A)/2+i,:);
      Bhat(2*i,:) = B(length(A)/2+i,:);
-     Hhat(:,2*i) = H(:,length(A)/2+i);
-     Hhat(:,2*(i-1)+1) = H(:,i);
-     Mhat(:,2*i) = H(:,length(A)/2+i);
-     Mhat(:,2*(i-1)+1) = H(:,i);
+     Hhat(:,2*(i-1)+1:2*(i-1)+2) = [H(:,i),H(:,length(A)/2+i)];
 end
+[n,~] = size(H);
+tempH = Hhat;
+Hhat = zeros(size(tempH));
+for i = 1:n
+    if mod(i,2) == 0
+        Hhat(i,:) = tempH(i/2+n/2,:);
+    end
+end
+for i = 1:n/2
+    Hhat(2*(i-1)+1,:) = tempH(i,:);
+end
+Mhat = Hhat;
