@@ -10,8 +10,7 @@ Daug(1).D = [];
 
 for i = 1:length(divRange)
     ControlLocs = num/divRange(i):num/divRange(i):num;
-    SensorLocs = [ControlLocs,ControlLocs-1];
-    SensorLocs = sort(SensorLocs);
+    SensorLocs = [ControlLocs,ControlLocs+200];
     [A,B_dist,B,C] = singleSpringSystem(m,k,c,num,SensorLocs,ControlLocs);
     [Ahat,Dhat,Bhat,Hhat,Mhat] = diagonalizeA(A,B_dist,B,C,C);
     [~,subA,~,subB,~,subD,~,subM,~,subH] = expandA(Ahat,Bhat,Dhat,Mhat,Hhat,ControlLocs,num);
