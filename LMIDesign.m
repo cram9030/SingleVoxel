@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [K,G,Z] = LMIDesign(A,D,B,H,M,W,V,I_c,O_c)
+function [K,G,Z] = LMIDesign(A,D,B,H,M,W,V,Q,R,I_c,O_c)
 
 yalmip('clear');
 [m,n] = size(B);
@@ -26,8 +26,10 @@ G = sdpvar(n,m+n);
 %Controller
 F = [[Z*Aalpha'+Aalpha*Z+G'*B'+B*G  D*sqrt(W);sqrt(W)'*D' -eye(size(W))]<0];
 F = F + [Z-V> 0]; % %Z is positive semidefinit
-F = F + [diag(O_c)-C(1:length(O_c),:)*(Y+Z)*C(1:length(O_c),:)'>=0];
-F = F + [diag(I_c)-C(length(O_c)+1:end,:)*(Y+Z)*C(length(O_c)+1:end,:)'>=0];
+for i = 1:length(O_c)
+    F = F + [O_c(i)-C(i,:)*(Z)*C(i,:)'>=0];
+end
+F = F + [diag(I_c)-C(length(O_c)+1:end,:)*(Z)*C(length(O_c)+1:end,:)'>=0];
 
 
 %create objective function
@@ -44,4 +46,8 @@ Z = double(Z);
 G = double(G);
 K = G/Z;
 
+%for i = 1:length(O_c)
+%    C(i,:)*Z*C(i,:)'
+%end
 max(real(eig(A+B*G/Z)))
+min(real(eig(A+B*G/Z)))
