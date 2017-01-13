@@ -26,8 +26,8 @@ global Aaug Baug Daug K
 
 % Calculate U and the actual state vector
 %u = K*x_c;
-%u = zeros(size(u));
 u = K*x;
+%u = zeros(size(u));
 
 [~,n] = size(Daug);
 
