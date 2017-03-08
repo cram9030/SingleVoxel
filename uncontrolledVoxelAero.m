@@ -32,17 +32,17 @@ u = zeros(size(u));
 [~,n] = size(Daug);
 L = 0:0.283:56.6;
 dL = diff(L);
-U_inf = 4.02336*rand;
+U_inf = 2.2352*rand(n,1);
 cord = 0.283/.12;
 CL = 269.303850944448e-003;
 gamma_0 = 2*CL*U_inf*cord/pi;
 rho_m = 1.225;
-w = zeros(n,1);
+w = ones(n,1);
 
-for i = 1:200
-    w(i) = 1+(1/114*sqrt(3249-(L(i+1)-dL(i)/2)^2)*(L(i+1)-dL(i)/2)+57/2*asin((L(i)-dL(i)/2)/57)-(1/114*sqrt(3249-(L(i)+dL(i)/2)^2)*(L(i)+dL(i)/2)+57/2*asin((L(i)+dL(i)/2)/57)));
-end
+% for i = 1:200
+%     w(i) = 1+(1/114*sqrt(3249-(L(i+1)-dL(i)/2)^2)*(L(i+1)-dL(i)/2)+57/2*asin((L(i)-dL(i)/2)/57)-(1/114*sqrt(3249-(L(i)+dL(i)/2)^2)*(L(i)+dL(i)/2)+57/2*asin((L(i)+dL(i)/2)/57)));
+% end
 
-w = rho_m*U_inf*w;
+w = rho_m*U_inf.*w;
 
 dx = Aaug*x+Baug*u+Daug*w;
