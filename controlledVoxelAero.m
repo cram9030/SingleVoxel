@@ -40,6 +40,6 @@ rho_m = 1.225;
 
 w = normpdf(t,2,1)/max(normpdf(t,2,1))*ones(n,1);
 
-w = rho_m*U_inf.*w;
+w = rho_m*U_inf'.*w;
 
 dx = Aaug*x+Baug*u+Daug*w;
