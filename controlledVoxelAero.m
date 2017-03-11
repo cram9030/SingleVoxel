@@ -32,13 +32,13 @@ u = K*x;
 [~,n] = size(Daug);
 L = 0:0.283:56.6;
 dL = diff(L);
-U_inf = 2*2.2352*normpdf(L(1:end-1),40,10)/max(normpdf(L(1:end-1),40,10));
+U_inf = 2.2352*normpdf(L(1:end-1),40,10)/max(normpdf(L(1:end-1),40,10));
 cord = 0.283/.12;
 CL = 269.303850944448e-003;
 gamma_0 = 2*CL*U_inf*cord/pi;
 rho_m = 1.225;
 
-w = normpdf(t,2,1)/max(normpdf(t,2,1))*ones(n,1);
+w = normpdf(t,2,1)/normpdf(2,2,1)*ones(n,1);
 
 w = rho_m*U_inf'.*w;
 
