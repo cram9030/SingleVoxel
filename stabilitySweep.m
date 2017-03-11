@@ -36,13 +36,13 @@ for i = 1:length(divRange)
                 subQ(l).Q = weightRange(k)*eye(m+n);
             end
             [~,~,~,K,~] = DecentralizedLMI(subA,subD,subB,subH,subM,subW,subV,subQ,subR,subI_c,subO_c);
-            Kgain(i,j).K = K;
-            contEig(i,j) = max(real(eig(Aaug(i).A+Baug(i).B*K)));
-            contStiff(i,j) = min(real(eig(Aaug(i).A+Baug(i).B*K)));
+            Kgain(i,j,k).K = K;
+            contEig(i,j,k) = max(real(eig(Aaug(i).A+Baug(i).B*K)));
+            contStiff(i,j,k) = min(real(eig(Aaug(i).A+Baug(i).B*K)));
             if max(real(eig(Aaug(i).A+Baug(i).B*K)))<0
-                contStab(i,j) = 1;
+                contStab(i,j,k) = 1;
             else
-                contStab(i,j) = 0;
+                contStab(i,j,k) = 0;
             end
         end
     end
