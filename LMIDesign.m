@@ -5,7 +5,7 @@ yalmip('clear');
 [m,n] = size(B);
 [~,r] = size(D);
 [s,~] = size(M);
-Aalpha = [A+4e0*eye(size(A)),B;zeros(n,m),zeros(n)];
+Aalpha = [A+1.5e0*eye(size(A)),B;zeros(n,m),zeros(n)];
 A = [A,B;zeros(n,m),-eye(n)];
 B = [zeros(size(B));eye(n)];
 D = [D;zeros(n,r)];
